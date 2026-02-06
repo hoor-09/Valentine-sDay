@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Valentine / Galentine</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      overflow: hidden;
+      background: linear-gradient(135deg, #ffafcc, #cdb4ff, #b8c0ff);
+    }
+
+    /* ================= BALLOON LAYER ================= */
+
+    #hearts-container {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .balloon {
+      position: absolute;
+      bottom: -150px;
+      animation: floatUp linear forwards;
+    }
+
+    .balloon-heart {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #d63384, #6f2dbd);
+      transform: rotate(45deg);
+      border-radius: 10%;
+      box-shadow: inset -5px -5px 10px rgba(0,0,0,0.15);
+    }
+
+    .balloon-heart::before,
+    .balloon-heart::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: inherit;
+      border-radius: 50%;
+    }
+
+    .balloon-heart::before {
+      top: -50%;
+      left: 0;
+    }
+
+    .balloon-heart::after {
+      left: -50%;
+      top: 0;
+    }
+
+    .balloon-string {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      width: 2px;
+      height: 90px;
+      background: rgba(80, 0, 120, 0.6);
+      transform: translateX(-50%);
+    }
+
+    @keyframes floatUp {
+      from {
+        transform: translateY(0) translateX(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateY(-130vh) translateX(40px);
+        opacity: 0;
+      }
+    }
+
+    /* ================= CONTENT ================= */
+
+    .container {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #4a0072;
+    }
+
+    h1 {
+      font-size: 42px;
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeIn 1.5s ease forwards;
+      animation-delay: 1.5s;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    button {
+      padding: 14px 30px;
+      font-size: 16px;
+      border-radius: 40px;
+      border: none;
+      cursor: pointer;
+      position: fixed;
+      z-index: 3;
+    }
+
+    #yesBtn {
+      background: linear-gradient(135deg, #ff5fa2, #9d4edd);
+      color: white;
+      left: 45%;
+      top: 55%;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards;
+      animation-delay: 2.5s;
+    }
+
+    #noBtn {
+      background: white;
+      color: #6f2dbd;
+      border: 2px solid #6f2dbd;
+      left: 55%;
+      top: 55%;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards;
+      animation-delay: 2.5s;
+    }
+
+    #yesBtn:hover {
+      transform: scale(1.1);
+    }
+
+    #message {
+      display: none;
+      max-width: 700px;
+      font-size: 32px;
+      line-height: 1.4;
+      animation: fadeIn 1s ease forwards;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="hearts-container"></div>
+
+  <div class="container">
+    <h1 id="question">Will you be my Valentine / Galentine?</h1>
+
+    <button id="yesBtn">Yes</button>
+    <button id="noBtn">No</button>
+
+    <div id="message">
+      hought so... BEST decision!
+
+      <br><br>
+
+      But seriously  
+      I’m really glad I have you.  
+      You make life lighter, louder, and a lot more fun.  
+      Happy Valentine.
+    </div>
+  </div>
+
+  <script>
+    const heartsContainer = document.getElementById('hearts-container');
+    const noBtn = document.getElementById('noBtn');
+    const yesBtn = document.getElementById('yesBtn');
+    const question = document.getElementById('question');
+    const message = document.getElementById('message');
+
+    // Big balloon burst on load
+    for (let i = 0; i < 35; i++) {
+      setTimeout(createBalloon, i * 100);
+    }
+
+    // Continuous balloons
+    setInterval(createBalloon, 400);
+
+    function createBalloon() {
+      const balloon = document.createElement('div');
+      balloon.className = 'balloon';
+
+      const heart = document.createElement('div');
+      heart.className = 'balloon-heart';
+
+      const string = document.createElement('div');
+      string.className = 'balloon-string';
+
+      balloon.appendChild(heart);
+      balloon.appendChild(string);
+
+      const size = 60 + Math.random() * 40;
+      balloon.style.width = size + 'px';
+      balloon.style.height = size * 0.9 + 'px';
+
+      balloon.style.left = Math.random() * 100 + 'vw';
+      balloon.style.animationDuration = Math.random() * 4 + 6 + 's';
+
+      heartsContainer.appendChild(balloon);
+
+      setTimeout(() => balloon.remove(), 10000);
+    }
+
+    // NO button runs away
+    function moveNoButton() {
+      const maxX = window.innerWidth - noBtn.offsetWidth;
+      const maxY = window.innerHeight - noBtn.offsetHeight;
+
+      noBtn.style.left = Math.random() * maxX + 'px';
+      noBtn.style.top = Math.random() * maxY + 'px';
+    }
+
+    noBtn.addEventListener('mouseenter', moveNoButton);
+    noBtn.addEventListener('click', moveNoButton);
+
+    // YES button
+    yesBtn.addEventListener('click', () => {
+      question.style.display = 'none';
+      yesBtn.style.display = 'none';
+      noBtn.style.display = 'none';
+      message.style.display = 'block';
+    });
+  </script>
+
+</body>
+</html>
